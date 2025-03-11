@@ -53,7 +53,7 @@ export default function Feed() {
   return (
     <div 
       ref={containerRef}
-      className="h-[100vh] overflow-y-auto snap-y snap-mandatory"
+      className="h-[100vh] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
     >
       <AnimatePresence initial={false}>
         {content.map((item, index) => (
