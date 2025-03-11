@@ -36,7 +36,7 @@ export default function Feed() {
 
   if (isLoading) {
     return (
-      <div className="h-[100vh] px-4">
+      <div className="h-[calc(100vh-4rem)] px-4">
         <Skeleton className="w-full h-full" />
       </div>
     );
@@ -44,7 +44,7 @@ export default function Feed() {
 
   if (!content?.length) {
     return (
-      <div className="h-[100vh] flex items-center justify-center px-4">
+      <div className="h-[calc(100vh-4rem)] flex items-center justify-center px-4">
         <p className="text-muted-foreground">No content available</p>
       </div>
     );
@@ -53,7 +53,7 @@ export default function Feed() {
   return (
     <div 
       ref={containerRef}
-      className="h-[100vh] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
+      className="h-[calc(100vh-4rem)] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
     >
       <AnimatePresence initial={false}>
         {content.map((item, index) => (

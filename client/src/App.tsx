@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Feed from "@/pages/feed";
 import Shop from "@/pages/shop";
 import Learn from "@/pages/learn";
+import Account from "@/pages/account";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/feed" component={Feed} />
       <Route path="/shop" component={Shop} />
       <Route path="/learn" component={Learn} />
+      <Route path="/account" component={Account} />
       <Route component={NotFound} />
     </Switch>
   );

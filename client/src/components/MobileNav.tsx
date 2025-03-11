@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, Compass, ShoppingBag, Video } from "lucide-react";
+import { Home, Compass, ShoppingBag, Video, User } from "lucide-react";
 
 export default function MobileNav() {
   const [location] = useLocation();
@@ -9,6 +9,7 @@ export default function MobileNav() {
     { icon: Compass, label: "Feed", href: "/feed" },
     { icon: ShoppingBag, label: "Shop", href: "/shop" },
     { icon: Video, label: "Learn", href: "/learn" },
+    { icon: User, label: "Account", href: "/account" },
   ];
 
   return (
