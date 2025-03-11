@@ -10,50 +10,60 @@ export default function Feed() {
     queryKey: ["/api/content"]
   });
 
-  const [visibleItems, setVisibleItems] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && content && visibleItems < content.length) {
-          // Add one more item when reaching the bottom
-          setVisibleItems((prev) => Math.min(prev + 1, content?.length || 0));
-        }
-      },
-      { threshold: 0.5 }
-    );
+    const container = containerRef.current;
+    if (!container) return;
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+    const handleScroll = () => {
+      if (!content) return;
 
-    return () => observer.disconnect();
-  }, [content, visibleItems]);
+      // Calculate which card is most visible based on scroll position
+      const viewportHeight = window.innerHeight;
+      const scrollPosition = container.scrollTop;
+      const newIndex = Math.round(scrollPosition / viewportHeight);
+
+      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < content.length) {
+        setCurrentIndex(newIndex);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [content, currentIndex]);
 
   if (isLoading) {
     return (
-      <div className="container px-4 py-8 space-y-4">
-        <Skeleton className="w-full h-[400px]" />
+      <div className="h-[100vh] px-4">
+        <Skeleton className="w-full h-full" />
+      </div>
+    );
+  }
+
+  if (!content?.length) {
+    return (
+      <div className="h-[100vh] flex items-center justify-center px-4">
+        <p className="text-muted-foreground">No content available</p>
       </div>
     );
   }
 
   return (
-    <div className="container px-4 py-8">
-      <div className="space-y-4">
-        <AnimatePresence mode="popLayout">
-          {content?.slice(0, visibleItems).map((item) => (
-            <FeedCard key={item.id} content={item} />
-          ))}
-        </AnimatePresence>
-      </div>
-      {/* Intersection observer target */}
-      <div 
-        ref={containerRef} 
-        className="h-20"
-        aria-hidden="true"
-      />
+    <div 
+      ref={containerRef}
+      className="h-[100vh] overflow-y-auto snap-y snap-mandatory"
+    >
+      <AnimatePresence initial={false}>
+        {content.map((item, index) => (
+          <FeedCard 
+            key={item.id} 
+            content={item}
+            isVisible={index === currentIndex}
+          />
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
